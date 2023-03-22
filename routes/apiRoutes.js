@@ -5,7 +5,7 @@ const db = require('../db/db.json')
 //npmjs
 const readFileAsync = util.promisify(fs.readFile);
 
-router.get('/notes', async (req, res) =>{
+router.get('/notes', (req, res) =>{
     return readFileAsync("./db/db.json","utf8").then((notes)=>{
         let allNotes;
         try {
@@ -15,7 +15,11 @@ router.get('/notes', async (req, res) =>{
         }
         console.log(allNotes)
         return allNotes
-    } );
+    } ).then((results) => {
+        return res.json(results)
+    }).catch((err) => {
+        res.status(500).json(err);
+    });
     // const file = await res.json(db)
     // console.log(file);
     // return file
